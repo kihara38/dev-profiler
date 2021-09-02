@@ -1,25 +1,36 @@
-const express=require ('express');
-const mongoose=require ('mongoose')
+const express = require("express");
+const mongoose = require("mongoose");
+const bodyparser = require("body-parser");
+const passport = require("passport");
 
-const app=express();
+const app = express();
 
-const users=require ('./routes/api/users');
-const profile=require ('./routes/api/profile');
-const posts=require ('./routes/api/posts');
+const users = require("./routes/api/users");
+const profile = require("./routes/api/profile");
+const posts = require("./routes/api/posts");
+
+//body parser middleware
+app.use(bodyparser.urlencoded({ extended: false }));
+app.use(bodyparser.json());
 
 //db config
-const db=require('./config/keys').mongoURI;
+const db = require("./config/keys").mongoURI;
 
-mongoose.connect(db)
-.then(()=>console.log('mongo db connected'))
-.catch(err=>console.log(err));
+mongoose
+  .connect(db)
+  .then(() => console.log("mongo db connected"))
+  .catch((err) => console.log(err));
 
-app.get('/',(req,res)=>res.send('hello'));
+//passport middleware
+app.use(passport.initialize());
 
-app.use('/api/users',users);
-app.use('/api/profile',profile);
-app.use('/api/posts',posts);
+//passport config
+require("./config/passport")(passport);
 
-const port=process.env.port||5001;
+app.use("/api/users", users);
+app.use("/api/profile", profile);
+app.use("/api/posts", posts);
 
-app.listen(port,()=>console.log(`listening to port ${port}`));
+const port = process.env.port || 5001;
+
+app.listen(port, () => console.log(`listening to port ${port}`));
