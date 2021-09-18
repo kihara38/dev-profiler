@@ -8,7 +8,7 @@ const profileSchema=new Schema({
     company:{type:String},
     website:{type:String},
     location:{type:String},
-    statis:{type:String},
+    status:{type:String},
     skills:{type:[String],required:true},
     bio:{type:String},
     githubusername:{type:String},
@@ -41,6 +41,9 @@ const profileSchema=new Schema({
             type:String
         },
         linkedin:{
+            type:String
+        },
+        instagram:{
             type:String
         },
     },
